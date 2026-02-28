@@ -1,0 +1,287 @@
+/* ─────────────────────────────────────────
+   TFM — The Fragrant Memories  |  One Link
+   style.css
+───────────────────────────────────────── */
+
+/* Reset */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ─── Root Tokens ─── */
+:root {
+  --white:            #ffffff;
+  --black:            #000000;
+  --overlay-bg:       rgba(0, 0, 0, 0.22);
+  --btn-bg:           rgba(22, 22, 22, 0.72);
+  --btn-border:       rgba(255, 255, 255, 0.18);
+  --btn-hover-bg:     rgba(45, 45, 45, 0.88);
+  --btn-hover-border: rgba(255, 255, 255, 0.45);
+  --icon-border:      rgba(255, 255, 255, 0.55);
+  --icon-hover-bg:    rgba(255, 255, 255, 0.18);
+  --font:             'Poppins', sans-serif;
+  --transition:       0.28s ease;
+}
+
+/* ─── Base ─── */
+html, body {
+  height: 100%;
+  width: 100%;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Video Background ─── */
+.video-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-bg);
+}
+
+/* ─── Main Container ─── */
+.container {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 24px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: pageIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Top Spacer
+   Pushes the social icons + buttons down so they sit
+   below the logo that's already embedded in the video.
+   38vh ≈ roughly the bottom of where the video logo ends.
+─── */
+.top-spacer {
+  flex: 0 0 26vh;
+  min-height: 26vh;
+}
+
+/* ─── Social Icons Row ─── */
+.social-row {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 28px;
+  animation: rowIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--icon-border);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--white);
+  text-decoration: none;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.social-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.social-icon:hover {
+  background: var(--icon-hover-bg);
+  border-color: rgba(255, 255, 255, 0.9);
+  transform: scale(1.12);
+}
+
+.social-icon:active {
+  transform: scale(0.94);
+}
+
+/* ─── Location Buttons ─── */
+.locations {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  width: 100%;
+  max-width: 430px;
+}
+
+/* Stagger each button entrance with CSS only — no JS needed */
+.loc-btn {
+  animation: btnIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.loc-btn:nth-child(1) { animation-delay: 0.40s; }
+.loc-btn:nth-child(2) { animation-delay: 0.50s; }
+.loc-btn:nth-child(3) { animation-delay: 0.60s; }
+.loc-btn:nth-child(4) { animation-delay: 0.70s; }
+.loc-btn:nth-child(5) { animation-delay: 0.80s; }
+.loc-btn:nth-child(6) { animation-delay: 0.90s; }
+
+@keyframes btnIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.loc-btn {
+  display: block;
+  width: 100%;
+  padding: 15px 15px;
+  background: var(--btn-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--btn-border);
+  border-radius: 50px;
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 2.8px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.loc-btn:hover {
+  background: var(--btn-hover-bg);
+  border-color: var(--btn-hover-border);
+  transform: scale(1.015);
+}
+
+.loc-btn:active {
+  transform: scale(0.975);
+}
+
+/* Ripple effect (injected by JS) */
+.loc-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(0);
+  animation: rippleAnim 0.55s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ─── Footer ─── */
+.footer {
+  margin-top: 100px;
+  text-align: center;
+  animation: footerIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both;
+}
+
+@keyframes footerIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.footer a {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--transition);
+  white-space: nowrap;
+}
+
+.footer a:hover {
+  color: var(--white);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 400px) {
+  .container {
+    padding: 0 18px 28px;
+  }
+
+  .social-row {
+    gap: 10px;
+  }
+
+  .social-icon {
+    width: 43px;
+    height: 43px;
+  }
+
+  .social-icon svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .loc-btn {
+    font-size: 11.5px;
+    padding: 14px 20px;
+    letter-spacing: 2.2px;
+  }
+}
+
+/* Taller phones — give a touch more breathing room */
+@media (min-height: 800px) {
+  .top-spacer {
+    flex: 0 0 28vh;
+    min-height: 28vh;
+  }
+
+  .social-row {
+    margin-bottom: 32px;
+  }
+
+  .locations {
+    gap: 13px;
+  }
+}
