@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TFM — Link Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <!-- ── Topbar ─────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand">
+        <span class="brand-abbr">TFM</span>
+        <span class="brand-sep">·</span>
+        <span class="brand-label">Link Manager</span>
+      </div>
+      <div class="topbar-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"></button>
+        <a href="index.html" target="_blank" rel="noopener" class="btn-preview">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Preview Page
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main ──────────────────────────────────────────────── -->
+  <main class="main">
+    <div class="main-inner">
+
+      <!-- Analytics Overview -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Analytics</h2>
+          <span class="section-badge">All time</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">Total Clicks</span>
+            <span class="stat-value" id="statTotal">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Top Link</span>
+            <span class="stat-value stat-sm" id="statTop">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Links Live</span>
+            <span class="stat-value" id="statCount">—</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Links -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Links</h2>
+          <button class="btn-add" id="btnAdd">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Link
+          </button>
+        </div>
+        <div class="links-list" id="linksList">
+          <div class="empty-state" id="emptyState">
+            <span class="empty-icon">🔗</span>
+            <p class="empty-title">No links yet</p>
+            <p class="empty-sub">Add your first link to get started</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ── Add / Edit Modal ───────────────────────────────────── -->
+  <div class="backdrop" id="backdrop" aria-hidden="true">
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+      <div class="modal-head">
+        <h3 class="modal-title" id="modalTitle">Add Link</h3>
+        <button class="close-btn" id="closeModal" aria-label="Close">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <form id="linkForm" class="modal-body" novalidate>
+
+        <!-- Title -->
+        <div class="field">
+          <label class="field-lbl" for="fTitle">Title</label>
+          <input class="field-input" id="fTitle" type="text" placeholder="e.g. Marina Mall" autocomplete="off" required />
+          <p class="field-err hidden" id="errTitle">Please enter a title</p>
+        </div>
+
+        <!-- URL -->
+        <div class="field">
+          <label class="field-lbl" for="fUrl">URL</label>
+          <input class="field-input" id="fUrl" type="url" placeholder="https://example.com" autocomplete="off" required />
+          <p class="field-err hidden" id="errUrl">Please enter a valid URL</p>
+        </div>
+
+        <!-- Icon -->
+        <div class="field">
+          <label class="field-lbl">Icon</label>
+
+          <!-- Tab switcher -->
+          <div class="tab-bar">
+            <button type="button" class="tab active" data-tab="preset">Choose Icon</button>
+            <button type="button" class="tab" data-tab="upload">Upload Custom</button>
+          </div>
+
+          <!-- Preset panel -->
+          <div class="tab-panel" id="panelPreset">
+            <div class="preset-grid" id="presetGrid"><!-- filled by JS --></div>
+          </div>
+
+          <!-- Upload panel -->
+          <div class="tab-panel hidden" id="panelUpload">
+            <div class="drop-zone" id="dropZone">
+              <input type="file" id="fileInput" accept=".svg,.png,.jpg,.jpeg" hidden />
+
+              <!-- Idle state -->
+              <div id="dropIdle" class="drop-idle">
+                <div class="drop-icon-wrap">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <p class="drop-label">Drop file or <button type="button" id="browseBtn" class="browse-link">browse</button></p>
+                <p class="drop-hint">SVG (max 50 KB) · PNG / JPG (max 200 × 200 px, 200 KB)</p>
+              </div>
+
+              <!-- Preview state -->
+              <div id="dropPreview" class="drop-preview hidden">
+                <img id="previewImg" class="preview-thumb" src="" alt="" />
+                <div class="preview-meta">
+                  <span class="preview-name" id="previewName"></span>
+                  <span class="preview-size" id="previewSize"></span>
+                </div>
+                <button type="button" id="removeFile" class="remove-btn" aria-label="Remove file">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            </div>
+            <p class="upload-err hidden" id="uploadErr"></p>
+          </div>
+        </div>
+
+        <!-- Category -->
+        <div class="field">
+          <label class="field-lbl">Category</label>
+          <div class="seg-ctrl">
+            <button type="button" class="seg active" data-cat="social">Social</button>
+            <button type="button" class="seg" data-cat="location">Location</button>
+            <button type="button" class="seg" data-cat="other">Other</button>
+          </div>
+        </div>
+
+        <!-- Footer buttons -->
+        <div class="modal-foot">
+          <button type="button" id="cancelBtn" class="btn-ghost">Cancel</button>
+          <button type="submit" id="submitBtn" class="btn-primary">Add Link</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
